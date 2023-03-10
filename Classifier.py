@@ -76,13 +76,14 @@ def get_model():
 
 model = get_model()
 file_path = current_dir+"/baseline_cnn_mitbih.h5"
-checkpoint = ModelCheckpoint(file_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-early = EarlyStopping(monitor="val_acc", mode="max", patience=5, verbose=1)
-redonplat = ReduceLROnPlateau(monitor="val_acc", mode="max", patience=3, verbose=2)
-callbacks_list = [checkpoint, early, redonplat]  # early
+
 
 def train_model():
 
+    checkpoint = ModelCheckpoint(file_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+    early = EarlyStopping(monitor="val_acc", mode="max", patience=5, verbose=1)
+    redonplat = ReduceLROnPlateau(monitor="val_acc", mode="max", patience=3, verbose=2)
+    callbacks_list = [checkpoint, early, redonplat]  # early
     model.fit(X, Y, epochs=1000, verbose=2, callbacks=callbacks_list, validation_split=0.1,class_weight=class_weights)
     
     model.load_weights(file_path)
